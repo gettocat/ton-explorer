@@ -1,0 +1,41 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+	<table class='table table-bordered table-responsive'>
+		<tr>
+			<th>Account id</th>
+			<th>Balance</th>
+			<th>
+				Info
+			</th>
+		</tr>
+
+		{% for acc in accounts%}
+
+			<tr>
+				<td>
+					<a href='/account/{{acc.id}}'>{{acc.id}}</a>
+				</td>
+				<td>{{acc.balance|balance}}</td>
+				<td>
+					Account type:
+					<div>Account type:
+						{% if acc.acc_type == 1 %}active{% else %}frozen
+						{% endif %}
+					</div>
+					<div>
+						Last payment:
+						{{acc.last_paid|date}}
+					</div>
+					{% if acc.due_payment %}
+						<div>Due payment:
+							{{acc.due_payment|date}}</div>
+					{% endif %}
+				</td>
+			</tr>
+
+		{% endfor %}
+	</table>
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+	<div class="block-info">
+		<h3>Ton message info</h3>
+		<table class="table table-bordered table-striped table-responsive">
+			<tr>
+				<th>Name</th>
+				<th>Value</th>
+			</tr>
+			<tr>
+				<td>Message type</td>
+				<td>{{msg.msg_type_name}}</td>
+			</tr>
+			<tr>
+				<td>Status</td>
+				<td>{{msg.status_name}}</td>
+			</tr>
+			<tr>
+				<td>Block</td>
+				<td>
+					<a href='/block/{{msg.block_id}}'>{{msg.block_id}}</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Source account</td>
+				<td>
+					<a href='/account/{{msg.src}}'>{{msg.src}}</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Destination account</td>
+				<td>
+					<a href='/account/{{msg.dst}}'>{{msg.dst}}</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Source work chain id</td>
+				<td>{{msg.src_workchain_id}}</td>
+			</tr>
+			<tr>
+				<td>Destination work chain id</td>
+				<td>{{msg.dst_workchain_id}}</td>
+			</tr>
+
+			<tr>
+				<td>Source transaction</td>
+				{% if msg.src_transaction %}
+					<td>
+						<a href='/tx/{{msg.src_transaction.id}}'>{{msg.src_transaction.id}}</a>
+					</td>
+				{% else %}
+					<td>none</td>
+				{% endif %}
+			</tr>
+
+			<tr>
+				<td>Destination transaction</td>
+				{% if msg.dst_transaction %}
+					<td>
+						<a href='/tx/{{msg.dst_transaction.id}}'>{{msg.dst_transaction.id}}</a>
+					</td>
+				{% else %}
+					<td>none</td>
+				{% endif %}
+			</tr>
+			<tr>
+				<td>Created at</td>
+				<td>{{msg.created_at|date}}
+					/
+					{{msg.created_at|durationFromTime}}</td>
+			</tr>
+			<tr>
+				<td>Value</td>
+				<td>{{msg.value|balance}}</td>
+			</tr>
+
+
+			<tr>
+				<td>Boc</td>
+				<td>
+					<textarea style='height:300px' readonly class='form-control'>{{msg.boc}}</textarea>
+				</td>
+			</tr>
+
+		</table>
+
+
+	</div>
+
+
+	<br/><br/>
+	<h3>Raw ton message</h3>
+	<pre>{{msg|json}}</pre>
+{% endblock %}

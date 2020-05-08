@@ -1,0 +1,150 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+	<div class="block-info">
+		<h3>Ton transaction info</h3>
+
+		<table class="table table-bordered table-striped table-responsive">
+			<tr>
+				<th>Name</th>
+				<th>Value</th>
+			</tr>
+
+			<tr>
+				<td>Version</td>
+				<td>{{tx.version}}</td>
+			</tr>
+			<tr>
+				<td>Hash</td>
+				<td>{{tx.id}}</td>
+			</tr>
+			<tr>
+				<td>Status</td>
+				<td>{{tx.status_name}}</td>
+			</tr>
+			<tr>
+				<td>Transaction type</td>
+				<td>{{tx.tr_type_name}}</td>
+			</tr>
+			<tr>
+				<td>Block id</td>
+				<td>
+					<a href='/block/{{tx.block_id}}'>{{tx.block_id}}</a>
+				</td>
+			</tr>
+			<tr>
+				<td>WorkChain id</td>
+				<td>{{tx.workchain_id}}</td>
+			</tr>
+			<tr>
+				<td>Account</td>
+				<td>
+					<a href='/account/{{tx.account_addr}}'>{{tx.account_addr}}</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Tx time</td>
+				<td>{{tx.now|date}}
+					/
+					{{tx.now|durationFromTime}}</td>
+			</tr>
+			<tr>
+				<td>Prev tx</td>
+				<td>
+					<a href='/tx/{{tx.prev_trans_hash}}'>{{tx.prev_trans_hash}}</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Input message</td>
+				<td>
+					<a href='/message/{{tx.in_msg}}'>{{tx.in_msg}}</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Output messages</td>
+				<td>
+					{% for let msg in tx._out_msgs %}
+						<a href='/message/{{msg}}'>{{msg}}</a><br/>
+					{% endfor %}
+				</td>
+			</tr>
+			<tr>
+				<td>States hahes</td>
+				<td>{{tx.old_hash}}
+					&rarr;
+					{{tx.new_hash}}</td>
+			</tr>
+			<tr>
+				<td>Storage</td>
+				<td>{{tx.storage.status_change_name}}
+					{{tx.storage.storage_fees_due}}
+					{{tx.storage.storage_fees_collected}}</td>
+			</tr>
+			<tr>
+				<td>Credit</td>
+				<td>{{tx.credit.credit|balance}}
+				</td>
+			</tr>
+			<tr>
+				<td>Compute</td>
+				<td>{{tx.compute.compute_type_name}}
+					{{tx.compute.success}}</td>
+			</tr>
+			<tr>
+				<td>Action</td>
+				<td>
+					<div>Success:
+						{{tx.action.success}}</div>
+					<div>Valid:
+						{{tx.action.valid}}</div>
+					<div>No funds:
+						{{tx.action.no_funds}}</div>
+					<div>Status:
+						{{tx.action.status_change_name}}</div>
+					<div>Result code:
+						{{tx.action.result_code}}</div>
+					<div>Total fees forwarded:
+						{{tx.action.total_fwd_fees|balance}}</div>
+					<div>Total action fees:
+						{{tx.action.total_action_fees|balance}}</div>
+					<div>Msg created:
+						{{tx.action.msgs_created}}</div>
+					<div>
+						ToT actions:
+						{{tx.action.tot_actions}}</div>
+					<div>
+						Spec actions:
+						{{tx.action.spec_actions}}</div>
+					<div>
+						Skipped actions:
+						{{tx.action.skipped_actions}}</div>
+				</td>
+			</tr>
+			<tr>
+				<td>Aborted</td>
+				<td>{{tx.aborted}}</td>
+			</tr>
+
+			<tr>
+				<td>Destroyed</td>
+				<td>{{tx.destroyed}}</td>
+			</tr>
+
+			<tr>
+				<td>Boc</td>
+				<td>
+					<textarea style='height:300px' readonly class='form-control'>{{tx.boc}}</textarea>
+				</td>
+			</tr>
+
+		</table>
+
+	</div>
+
+
+	<br/><br/>
+	<h3>Raw</h3>
+	<pre>{{tx|json}}</pre>
+
+{% endblock %}

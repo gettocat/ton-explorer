@@ -1,0 +1,60 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+	<h3>Last ton blocks</h3>
+  <div class="row">
+		<div class="col-1 col-xs-2 text-center">
+			<b>Height</b>
+		</div>
+
+		<div class="col-7 col-xs-6">
+			<b>
+				Block</b>
+		</div>
+		<div class="col-2 text-center">
+			<b>Tx count
+			</b>
+		</div>
+
+
+		<div class="col-2 text-center">
+			<b>Date</b>
+		</div>
+
+
+	</div>
+
+	{% for v in list %}
+
+		<div class="row block">
+
+			<div class="col-1  col-xs-2  text-center">
+				<a href="/height/{{v.seq_no}}">{{v.seq_no}}</a>
+			</div>
+
+			<div style='overflow-x: hidden' class="col-7 col-xs-6">
+				<a href="/block/{{v.id}}">{{v.id}}</a><br/>
+				minted
+				{{v.value_flow.minted|balance}}, exported
+				{{v.value_flow.exported|balance}}, imported
+				{{v.value_flow.imported|balance}}, fees
+        {{v.value_flow.fees_collected|balance}}
+			</div>
+
+			<div class="col-2 text-center">
+				{{v.tr_count}}
+			</div>
+
+			<div class="col-2 text-center">
+				{{v.gen_utime|durationFromTime}}
+				ago
+			</div>
+
+
+		</div>
+
+	{% endfor %}
+
+
+{% endblock %}

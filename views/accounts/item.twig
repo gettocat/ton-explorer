@@ -1,0 +1,155 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+	<div class="block-info">
+		<h3>Ton account info</h3>
+
+		<table class="table table-bordered table-striped table-responsive">
+			<tr>
+				<th>Name</th>
+				<th>Value</th>
+			</tr>
+
+			<tr>
+				<td>Account id</td>
+				<td>{{account.id}}</td>
+			</tr>
+
+			<tr>
+				<td>Workchain id</td>
+				<td>{{account.workchain_id}}</td>
+			</tr>
+
+			<tr>
+				<td>Account type</td>
+				<td>{{account.acc_type_name}}</td>
+			</tr>
+
+			<tr>
+				<td>Last paid</td>
+				<td>{{account.last_paid|date}}
+					/
+					{{account.last_paid|durationFromTime}}</td>
+			</tr>
+
+			<tr>
+				<td>Balance</td>
+				<td>{{account.balance|balance}}</td>
+			</tr>
+
+			<tr>
+				<td>Code</td>
+				<td>
+					<textarea style='height:300px' readonly class='form-control'>{{account.code}}</textarea>
+				</td>
+			</tr>
+
+			<tr>
+				<td>Data</td>
+				<td>
+					<textarea style='height:300px' readonly class='form-control'>{{account.data}}</textarea>
+				</td>
+			</tr>
+
+			<tr>
+				<td>Boc</td>
+				<td>
+					<textarea style='height:300px' readonly class='form-control'>{{account.boc}}</textarea>
+				</td>
+			</tr>
+
+		</table>
+
+
+		<h3>Transactions</h3>
+
+		<table class="table table-bordered table-striped table-responsive">
+			<tr>
+				<th>Date</th>
+				<th>Hash</th>
+				<th>Info</th>
+			</tr>
+
+			{% for tx in txs %}
+				<tr>
+					<td>{{tx.now|date}}</td>
+					<td>{{tx.tr_type_name}}
+						<a href='/tx/{{tx.id}}'>{{tx.id}}</a>
+					</td>
+					<td>
+
+						Status:
+						{{tx.status_name}}<br/>
+						Total fees:
+						{{tx.total_fees|balance}}<br/>
+
+					</td>
+				</tr>
+				<tr>
+					<td class='text-center' colspan='3'>
+						{% if tx.in_msg %}
+							<a href='/message/{{tx.in_msg}}'>from
+								{{trimTx(tx.in_msg)}}</a>
+						{% endif %}
+						to
+						{% for i in tx.out_msgs %}
+							<a href='/message/{{i}}'>{{trimTx(i)}}</a>
+							&nbsp;
+						{% endfor %}
+					</td>
+				</tr>
+			{% endfor %}
+
+		</table>
+
+		<h3>Messages</h3>
+
+		<table class="table table-bordered table-striped table-responsive">
+			<tr>
+				<th>Hash</th>
+				<th>Value</th>
+				<th>Fee</th>
+			</tr>
+
+			{% for msg in messages %}
+				<tr>
+					<td>
+						<a href='/message/{{msg.id}}'>{{msg.id}}</a>
+					</td>
+					<td>
+						{{msg.value|balance}}
+					</td>
+					<td>
+						{{msg.fwd_fee|balance}}
+						/
+						{{msg.import_fee|balance}}
+					</td>
+				</tr>
+				<tr>
+					<td colspan='3'>
+						<div class='row'>
+							<div class='col text-right'>
+								<a href='/tx/{{msg.src_transaction.id}}'>{{trimTx(msg.src_transaction.id)}}</a><br/>
+								<a href='/account/{{msg.src_transaction.account_addr}}'>{{trimTx(msg.src_transaction.account_addr)}}</a>
+							</div>
+							<div class='col-1 text-center'>&rarr;</div>
+							<div class='col text-left'>
+								<a href='/tx/{{msg.dst_transaction.id}}'>{{trimTx(msg.dst_transaction.id)}}</a><br/>
+								<a href='/account/{{msg.dst_transaction.account_addr}}'>{{trimTx(msg.dst_transaction.account_addr)}}</a>
+							</div>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+
+		</table>
+
+	</div>
+
+
+	<br/><br/>
+	<h3>Raw</h3>
+	<pre>{{account|json}}</pre>
+
+{% endblock %}

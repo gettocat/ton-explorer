@@ -1,0 +1,219 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+	<div class="block-info">
+		<h3>Ton block info</h3>
+		<table class="table table-bordered table-striped table-responsive">
+			<tr>
+				<th>Name</th>
+				<th>Value</th>
+			</tr>
+			<tr>
+				<td>Version</td>
+				<td>{{block.version}}</td>
+			</tr>
+			<tr>
+				<td>Hash</td>
+				<td>{{block.id}}</td>
+			</tr>
+			<tr>
+				<td>Status</td>
+				<td>{{block.status_name}}</td>
+			</tr>
+			<tr>
+				<td>Global id</td>
+				<td>{{block.global_id}}</td>
+			</tr>
+			<tr>
+				<td>Master ref</td>
+				<td>
+					<a href="/block/{{block.master_ref.root_hash}}">{{block.master_ref.root_hash}}</a>
+				</td>
+			</tr>
+
+			<tr>
+				<td>Prev ref</td>
+				<td>
+					<a href="/block/{{block.prev_ref.root_hash}}">{{block.prev_ref.root_hash}}</a>
+				</td>
+			</tr>
+
+			{% if block.prev_alt_ref %}
+				<tr>
+					<td>Prev alt ref</td>
+					<td>
+						<a href="/block/{{block.prev_alt_ref.root_hash}}">{{block.prev_alt_ref.root_hash}}</a>
+					</td>
+				</tr>
+			{% endif %}
+
+
+			{% if block.prev_vert_ref %}
+				<tr>
+					<td>Prev vert ref</td>
+					<td>
+						<a href="/block/{{block.prev_vert_ref.root_hash}}">{{block.prev_vert_ref.root_hash}}</a>
+					</td>
+				</tr>
+			{% endif %}
+
+			{% if block.prev_vert_alt_ref %}
+				<tr>
+					<td>Prev vert alt ref</td>
+					<td>
+						<a href="/block/{{block.prev_vert_alt_ref.root_hash}}">{{block.prev_vert_alt_ref.root_hash}}</a>
+					</td>
+				</tr>
+			{% endif %}
+
+			<tr>
+				<td>Block time</td>
+				<td>{{block.gen_utime|durationFromTime}}
+					ago /
+					{{block.gen_utime|date}}</td>
+			</tr>
+
+			<tr>
+				<td>Height</td>
+				<td>
+					<a href="/height/{{block.seq_no}}">{{block.seq_no}}</a>
+				</td>
+			</tr>
+
+			<tr>
+				<td>Vert height</td>
+				<td>
+					<a href="/vertheight/{{block.vert_seq_no}}">{{block.vert_seq_no}}</a>
+				</td>
+			</tr>
+
+
+			<tr>
+				<td>Shard</td>
+				<td>
+					{{block.shard}}
+				</td>
+			</tr>
+
+			<tr>
+				<td>Software</td>
+				<td>
+					{{block.gen_software_version}}
+					/
+					{{block.gen_software_capabilities}}
+				</td>
+			</tr>
+
+
+			<tr>
+				<td>Block values</td>
+				<td>
+					<div>Minted
+						{{block.value_flow.minted|balance}}</div>
+					<div>Exported
+						{{block.value_flow.exported|balance}}</div>
+					<div>Imported
+						{{block.value_flow.imported|balance}}</div>
+					<div>Fees
+						{{block.value_flow.fees_collected|balance}}</div>
+				</td>
+			</tr>
+
+			<tr>
+				<td>Transactions</td>
+				<td>
+					{{block.tr_count}}
+				</td>
+			</tr>
+
+		</table>
+
+		<h3>Accounts</h3>
+		<a name='coinbase'></a>
+
+		{% for acc in block.account_blocks %}
+			<h3>
+				<a href='/account/{{acc.account_addr}}'>{{acc.account_addr}}</a>
+				(
+				{{acc.tr_count}}
+				)</h3>
+
+			<table class='table table-bordered'>
+				<tr>
+					<th>Hash</th>
+					<th>Amount</th>
+					<th>Info</th>
+				</tr>
+				{% for txi in acc.transactions %}
+					<tr>
+						<td>
+							tx
+							{{txs[txi.transaction_id].tr_type_name}}
+							<a href='/tx/{{txs[txi.transaction_id].id}}'>{{txs[txi.transaction_id].id}}</a>
+							<table class='table table-bordered table-responsive'>
+
+								<tr>
+
+									<td>Status:
+										{{txs[txi.transaction_id].action.status_change_name}}</td>
+									<td>
+										<div>Success:
+											{{txs[txi.transaction_id].action.success }}</div>
+										<div>valid:
+											{{txs[txi.transaction_id].action.valid}}</div>
+										<div>no funds:
+											{{txs[txi.transaction_id].action.no_funds}}</div>
+									</td>
+
+								</tr>
+
+							</table>
+						</td>
+						<td>
+							{% if txs[txi.transaction_id].credit.credit %}
+								<div>Account amount
+									{{txs[txi.transaction_id].credit.credit|balance}}
+								</div>
+							{% endif %}
+							{% if txs[txi.transaction_id].storage.storage_fees_collected %}
+								<div>
+									Account transfered amount
+									{{txs[txi.transaction_id].storage.storage_fees_collected|balance}}
+									amount
+								</div>
+							{% endif %}
+							<div>
+								Total forwarded amount:
+								{{txs[txi.transaction_id].action.total_fwd_fees|balance}}
+							</div>
+							<div>
+								Total action amount:
+								{{txs[txi.transaction_id].action.total_action_fees|balance}}
+							</div>
+						</td>
+						<td>
+							<div>Status:
+								{{txs[txi.transaction_id].status_name}}</div>
+							<div>Fee:
+								{{txs[txi.transaction_id].total_fees|balance}}
+							</div>
+
+						</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endfor %}
+
+	</div>
+
+
+	<br/><br/>
+	<h3>Raw block</h3>
+	<pre>{{block|json}}</pre>
+
+	<br/><br/>
+	<h3>Raw transactions</h3>
+	<pre>{{txs|json}}</pre>
+
+{% endblock %}
