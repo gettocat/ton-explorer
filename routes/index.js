@@ -52,7 +52,14 @@ router.get('/block/:hash', function (req, res, next) {
         arr[txs[i].id] = txs[i]
       }
       data.txs = arr;
-      console.log(txs);
+
+      return req.ton.queries.messages.query({
+        block_id: { eq: req.params.hash }
+      }, 'id msg_type msg_type_name status status_name block_id body split_depth tick tock code data library src dst src_workchain_id dst_workchain_id created_at ihr_disabled ihr_fee fwd_fee import_fee bounce bounced value value_other {currency value} proof boc src_transaction {id account_addr} dst_transaction {id account_addr}', [], 1)
+
+    })
+    .then((msgs) => {
+      data.messages = msgs;
       res.render('block/item', data);
     })
     .catch(e => {

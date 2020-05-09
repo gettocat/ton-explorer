@@ -205,6 +205,48 @@
 			</table>
 		{% endfor %}
 
+		<h3>Messages</h3>
+
+		<table class="table table-bordered table-striped table-responsive">
+			<tr>
+				<th>Hash</th>
+				<th>Value</th>
+				<th>Fee</th>
+			</tr>
+
+			{% for msg in messages %}
+				<tr>
+					<td>
+						<a href='/message/{{msg.id}}'>{{msg.id}}</a>
+					</td>
+					<td>
+						{{msg.value|balance}}
+					</td>
+					<td>
+						{{msg.fwd_fee|balance}}
+						/
+						{{msg.import_fee|balance}}
+					</td>
+				</tr>
+				<tr>
+					<td colspan='3'>
+						<div class='row'>
+							<div class='col text-right'>
+								<a href='/tx/{{msg.src_transaction.id}}'>{{trimTx(msg.src_transaction.id)}}</a><br/>
+								<a href='/account/{{msg.src_transaction.account_addr}}'>{{trimTx(msg.src_transaction.account_addr)}}</a>
+							</div>
+							<div class='col-1 text-center'>&rarr;</div>
+							<div class='col text-left'>
+								<a href='/tx/{{msg.dst_transaction.id}}'>{{trimTx(msg.dst_transaction.id)}}</a><br/>
+								<a href='/account/{{msg.dst_transaction.account_addr}}'>{{trimTx(msg.dst_transaction.account_addr)}}</a>
+							</div>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+
+		</table>
+
 	</div>
 
 

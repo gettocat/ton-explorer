@@ -24,11 +24,15 @@
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav mr-auto">
 
-					<li class='nav-item dropdown'>
-						<a class="nav-link" href='#'>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							workchain:
 							{{workchain()}}
 						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+							<a class="dropdown-item" href="/?workchain_id=-1">-1</a>
+							<a class="dropdown-item" href="/?workchain_id=0">0</a>
+						</div>
 					</li>
 
 					<li class='nav-item'>
@@ -66,15 +70,16 @@
 					<br/>
 
 					©
-																																								Powered by Nano
+																																																		Powered by Nano
 					<a target="_blank" rel='nofollow' href='https://github.com/gettocat/ton-explorer'>Source code</a>
 
 				</div>
 
 			</div>
-
-
-			<script src="/assets/js/popper.js"></script>
-			<script src="/assets/js/bootstrap.min.js"></script>
 		</body>
 	</html>
+</div>
+
+
+<script src="/assets/js/popper.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script></body></html>
