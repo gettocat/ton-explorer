@@ -104,3 +104,4 @@ dist
 .tern-port
 /session-store.db
 /package-lock.json
+/views/additional.twig
